@@ -6,6 +6,7 @@ import { useDebounce } from 'use-debounce';
 import { DeviceTable } from '@/components/devices/device-table';
 import { DeviceSearch } from '@/components/devices/device-search';
 import { useDevices } from '@/hooks/use-devices';
+import Link from 'next/link';
 
 export default function DevicesPage() {
     const [searchText, setSearch] =
@@ -43,6 +44,9 @@ export default function DevicesPage() {
             <DeviceTable
                 devices={data.items}
             />
+            <Link href="/devices/new">
+                Create Device
+            </Link>
         </div>
     );
 }
