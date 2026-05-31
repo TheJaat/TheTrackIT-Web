@@ -14,7 +14,6 @@ export function ReturnDevice({
     async function handleReturn() {
         await returnDevice(
             userId,
-            deviceId,
         );
 
         window.location.reload();

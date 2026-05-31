@@ -1,58 +1,40 @@
 'use client';
 
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { allocateDevice } from '@/lib/allocation-api';
-import { useUsers } from '@/hooks/use-users';
 
 interface Props {
-  deviceId: string;
+    deviceId: string;
 }
 
-export function AllocateDevice({
-  deviceId,
-}: Props) {
-  const { data } = useUsers();
+export function AllocateDevice({ deviceId }: Props) {
+    const [loading, setLoading] = useState(false);
 
-  const [userId, setUserId] =
-    useState('');
+    const queryClient = useQueryClient();
 
-  async function handleAllocate() {
-    await allocateDevice(
-      deviceId,
-      userId,
-    );
+    async function handleAllocate() {
+        setLoading(true);
 
-    window.location.reload();
-  }
+        try {
+            await allocateDevice(deviceId);
 
-  return (
-    <div>
-      <select
-        value={userId}
-        onChange={(e) =>
-          setUserId(e.target.value)
+            await queryClient.invalidateQueries({
+                queryKey: ['devices'],
+            });
+        } finally {
+            setLoading(false);
         }
-      >
-        <option value="">
-          Select User
-        </option>
+    }
 
-        {data?.map((user: any) => (
-          <option
-            key={user.id}
-            value={user.id}
-          >
-            {user.name}
-          </option>
-        ))}
-      </select>
-
-      <button
-        onClick={handleAllocate}
-      >
-        Allocate
-      </button>
-    </div>
-  );
+    return (
+        <button
+            onClick={handleAllocate}
+            disabled={loading}
+            className="px-3 py-2 bg-blue-600 text-white rounded"
+        >
+            {loading ? 'Allocating...' : 'Allocate'}
+        </button>
+    );
 }

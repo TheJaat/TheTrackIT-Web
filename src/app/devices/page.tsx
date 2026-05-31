@@ -3,50 +3,123 @@
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
-import { DeviceTable } from '@/components/devices/device-table';
-import { DeviceSearch } from '@/components/devices/device-search';
 import { useDevices } from '@/hooks/use-devices';
-import Link from 'next/link';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { AllocateModal } from '@/components/devices/allocate-modal';
+import { ReturnModal } from '@/components/devices/return-modal';
+import { getCurrentUserId } from '@/lib/auth';
 
 export default function DevicesPage() {
-    const [searchText, setSearch] =
-        useState('');
-    const [search] = useDebounce(
-        searchText,
-        500,
-    );
+    const [searchText, setSearchText] = useState('');
+    const [search] = useDebounce(searchText, 500);
 
-    const {
-        data,
-        isLoading,
-        error,
-    } = useDevices({
-        search,
-    });
+    const queryClient = useQueryClient();
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
+    const { data, isLoading } = useDevices({ search });
+    const [selectedDevice, setSelectedDevice] =
+        useState<string | null>(null);
 
-    if (error) {
-        return <div>Error loading devices</div>;
-    }
+    const [allocateDeviceId, setAllocateDeviceId] =
+        useState<string | null>(null);
+
+    const [returnDeviceId, setReturnDeviceId] =
+        useState<string | null>(null);
+
+    const currentUserId = getCurrentUserId();
+
+
+    if (isLoading) return <div>Loading...</div>;
 
     return (
-        <div>
-            <h1>Devices</h1>
+        <div className="p-6 space-y-4">
 
-            <DeviceSearch
+            <h1 className="text-2xl font-bold">
+                Devices
+            </h1>
+
+            <Input
+                placeholder="Search devices..."
                 value={searchText}
-                onChange={setSearch}
+                onChange={(e) => setSearchText(e.target.value)}
             />
 
-            <DeviceTable
-                devices={data.items}
+            <table className="w-full border">
+                <thead className="bg-gray-100">
+                    <tr>
+                        <th className="p-2 text-left">Name</th>
+                        <th className="p-2 text-left">Brand</th>
+                        <th className="p-2 text-left">Status</th>
+                        <th className="p-2 text-left">Holder</th>
+                        <th className="p-2 text-left">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {data?.items?.map((device: any) => (
+                        <tr key={device.id} className="border-t">
+                            <td className="p-2">{device.name}</td>
+                            <td className="p-2">{device.brand}</td>
+
+                            <td className="p-2">
+                                <Badge
+                                    type={
+                                        device.status === 'AVAILABLE'
+                                            ? 'success'
+                                            : 'danger'
+                                    }
+                                >
+                                    {device.status}
+                                </Badge>
+                            </td>
+
+                            <td className="p-2">
+                                {device.currentUser?.name ?? 'None'}
+                            </td>
+
+                            <td className="p-2 space-x-2">
+                                <Button variant="secondary">
+                                    View
+                                </Button>
+
+                                {device.currentUserId === currentUserId ? (
+                                    <Button
+                                        variant="danger"
+                                        onClick={() => setReturnDeviceId(device.id)}
+                                    >
+                                        Return
+                                    </Button>
+                                ) : device.status === 'AVAILABLE' ? (
+                                    <Button
+                                        variant="primary"
+                                        onClick={() => setAllocateDeviceId(device.id)}
+                                    >
+                                        Allocate
+                                    </Button>
+                                ) : (
+                                    <Button disabled>
+                                        Allocated
+                                    </Button>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <AllocateModal
+                deviceId={allocateDeviceId || ''}
+                open={!!allocateDeviceId}
+                onClose={() => setAllocateDeviceId(null)}
             />
-            <Link href="/devices/new">
-                Create Device
-            </Link>
+            <ReturnModal
+                deviceId={returnDeviceId || ''}
+                open={!!returnDeviceId}
+                onClose={() => setReturnDeviceId(null)}
+            />
+
         </div>
     );
 }
