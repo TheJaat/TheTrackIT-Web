@@ -14,3 +14,18 @@ export async function allocateDevice(
 
   return response.data;
 }
+
+export async function returnDevice(
+    userId: string,
+    deviceId: string,
+) {
+    const response = await api.post(
+        '/allocations/return',
+        {
+            userId,
+            deviceId,
+        },
+    );
+
+    return response.data;
+}
