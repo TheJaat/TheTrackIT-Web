@@ -1,44 +1,96 @@
 'use client';
 
-import { useDashboard } from '@/hooks/use-dashboard';
+import { useDashboard, useRecentActivity }
+    from '@/hooks/use-dashboard';
 
 export default function DashboardPage() {
-  const {
-    data,
-    isLoading,
-  } = useDashboard();
+    const {
+        data,
+        isLoading,
+    } = useDashboard();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+    const activity = useRecentActivity();
 
-  return (
-    <div>
-      <h1>Dashboard</h1>
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
-      <h2>
-        Total Devices:
-        {' '}
-        {data.totalDevices}
-      </h2>
+    return (
+        <div
+            style={{
+                padding: '20px',
+            }}
+        >
+            <h1>Dashboard</h1>
 
-      <h2>
-        Available:
-        {' '}
-        {data.availableDevices}
-      </h2>
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns:
+                        'repeat(5, 1fr)',
+                    gap: '20px',
+                }}
+            >
+                <div>
+                    <h3>Total Devices</h3>
+                    <p>
+                        {data.totalDevices}
+                    </p>
+                </div>
 
-      <h2>
-        Allocated:
-        {' '}
-        {data.allocatedDevices}
-      </h2>
+                <div>
+                    <h3>Available</h3>
+                    <p>
+                        {data.availableDevices}
+                    </p>
+                </div>
 
-      <h2>
-        Employees:
-        {' '}
-        {data.totalUsers}
-      </h2>
-    </div>
-  );
+                <div>
+                    <h3>Allocated</h3>
+                    <p>
+                        {data.allocatedDevices}
+                    </p>
+                </div>
+
+                <div>
+                    <h3>Users</h3>
+                    <p>
+                        {data.totalUsers}
+                    </p>
+                </div>
+
+                <div>
+                    <h3>
+                        Active Allocations
+                    </h3>
+
+                    <p>
+                        {data.activeAllocations}
+                    </p>
+                </div>
+            </div>
+            <h2
+                style={{
+                    marginTop: '40px',
+                }}
+            >
+                Recent Activity
+            </h2>
+
+            <ul>
+                {activity.data?.map(
+                    (item: any) => (
+                        <li key={item.id}>
+                            {item.user}
+                            {' → '}
+                            {item.device}
+                            {' ('}
+                            {item.status}
+                            {')'}
+                        </li>
+                    ),
+                )}
+            </ul>
+        </div>
+    );
 }
