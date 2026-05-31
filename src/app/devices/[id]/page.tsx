@@ -51,7 +51,6 @@ export default function DevicePage() {
                 data.currentUser && (
                     <div style={{ marginTop: '20px' }}>
                         <ReturnDevice
-                            userId={data.currentUser.id}
                             deviceId={data.id}
                         />
                     </div>

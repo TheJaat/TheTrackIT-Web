@@ -1,46 +1,121 @@
 'use client';
 
-import { Device } from '@/types/device';
 import Link from 'next/link';
+
+import { Device } from '@/types/device';
+
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 interface Props {
     devices: Device[];
+    currentUserId: string | null;
+    onAllocate: (deviceId: string) => void;
+    onReturn: (deviceId: string) => void;
 }
 
 export function DeviceTable({
     devices,
+    currentUserId,
+    onAllocate,
+    onReturn,
 }: Props) {
     return (
         <table className="w-full border">
-            <thead>
+            <thead className="bg-gray-100">
                 <tr>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Brand</th>
-                    <th>Model</th>
-                    <th>Status</th>
-                    <th>Holder</th>
+                    <th className="p-2 text-left">
+                        Name
+                    </th>
+
+                    <th className="p-2 text-left">
+                        Brand
+                    </th>
+
+                    <th className="p-2 text-left">
+                        Status
+                    </th>
+
+                    <th className="p-2 text-left">
+                        Holder
+                    </th>
+
+                    <th className="p-2 text-left">
+                        Actions
+                    </th>
                 </tr>
             </thead>
 
             <tbody>
                 {devices.map((device) => (
-                    <tr key={device.id}>
-                        <td>
+                    <tr
+                        key={device.id}
+                        className="border-t"
+                    >
+                        <td className="p-2">
+                            {device.name}
+                        </td>
+
+                        <td className="p-2">
+                            {device.brand}
+                        </td>
+
+                        <td className="p-2">
+                            <Badge
+                                type={
+                                    device.status ===
+                                        'AVAILABLE'
+                                        ? 'success'
+                                        : 'danger'
+                                }
+                            >
+                                {device.status}
+                            </Badge>
+                        </td>
+
+                        <td className="p-2">
+                            {device.currentUser?.name ??
+                                'None'}
+                        </td>
+
+                        <td className="p-2 space-x-2">
                             <Link
                                 href={`/devices/${device.id}`}
                             >
-                                {device.deviceCode}
+                                <Button variant="secondary">
+                                    View
+                                </Button>
                             </Link>
-                        </td>
-                        <td>{device.name}</td>
-                        <td>{device.brand}</td>
-                        <td>{device.model}</td>
-                        <td>{device.status}</td>
 
-                        <td>
-                            {device.currentUser?.name ??
-                                '-'}
+                            {device.currentUserId ===
+                                currentUserId ? (
+                                <Button
+                                    variant="danger"
+                                    onClick={() =>
+                                        onReturn(
+                                            device.id,
+                                        )
+                                    }
+                                >
+                                    Return
+                                </Button>
+                            ) : device.status ===
+                                'AVAILABLE' ? (
+                                <Button
+                                    variant="primary"
+                                    onClick={() =>
+                                        onAllocate(
+                                            device.id,
+                                        )
+                                    }
+                                >
+                                    Allocate
+                                </Button>
+                            ) : (
+                                <Button disabled>
+                                    Allocated
+                                </Button>
+                            )}
                         </td>
                     </tr>
                 ))}
