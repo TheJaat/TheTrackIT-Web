@@ -1,6 +1,8 @@
 'use client';
 
 import { returnDevice } from '@/lib/allocation-api';
+import { Button } from '@/components/ui/button';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
     deviceId: string;
@@ -9,19 +11,24 @@ interface Props {
 export function ReturnDevice({
     deviceId,
 }: Props) {
+    const queryClient = useQueryClient();
+
     async function handleReturn() {
         await returnDevice(
             deviceId,
         );
 
-        window.location.reload();
+        queryClient.invalidateQueries({
+            queryKey: ['device', deviceId],
+        });
     }
 
     return (
-        <button
+        <Button
+            variant="danger"
             onClick={handleReturn}
         >
             Return Device
-        </button>
+        </Button>
     );
 }

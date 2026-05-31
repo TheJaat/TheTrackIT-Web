@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { allocateDevice } from '@/lib/allocation-api';
-
 interface Props {
     deviceId: string;
 }
@@ -21,7 +20,7 @@ export function AllocateDevice({ deviceId }: Props) {
             await allocateDevice(deviceId);
 
             await queryClient.invalidateQueries({
-                queryKey: ['devices'],
+                queryKey: ['device', deviceId],
             });
         } finally {
             setLoading(false);

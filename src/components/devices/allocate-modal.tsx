@@ -26,7 +26,13 @@ export function AllocateModal({
 
         try {
             await allocateDevice(deviceId);
-            queryClient.invalidateQueries({ queryKey: ['devices'] });
+            await queryClient.invalidateQueries({
+                queryKey: ['device', deviceId],
+            });
+
+            await queryClient.invalidateQueries({
+                queryKey: ['devices'],
+            });
             onClose();
         } finally {
             setLoading(false);
