@@ -6,6 +6,7 @@ import { useDevice } from '@/hooks/use-device';
 import { AllocateDevice } from '@/components/devices/allocate-device';
 import { ReturnDevice } from '@/components/devices/return-device';
 import { DeviceHistory } from '@/components/devices/device-history';
+import { Badge } from '@/components/ui/badge';
 
 export default function DevicePage() {
     const params = useParams();
@@ -83,9 +84,15 @@ export default function DevicePage() {
                                 Status
                             </p>
 
-                            <p>
+                            <Badge
+                                type={
+                                    data.status === 'AVAILABLE'
+                                        ? 'success'
+                                        : 'danger'
+                                }
+                            >
                                 {data.status}
-                            </p>
+                            </Badge>
                         </div>
 
                     </div>
