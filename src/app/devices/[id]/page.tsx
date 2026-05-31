@@ -104,19 +104,25 @@ export default function DevicePage() {
                     </h2>
 
                     {data.currentUser ? (
-                        <div>
-                            <p className="font-medium">
-                                {data.currentUser.name}
-                            </p>
+                        <div className="space-y-2">
+
+                            <div className="inline-flex items-center rounded-lg border px-3 py-2">
+                                <span className="font-medium">
+                                    {data.currentUser.name}
+                                </span>
+                            </div>
 
                             <p className="text-sm text-gray-500">
                                 Device is currently allocated
                             </p>
+
                         </div>
                     ) : (
-                        <p>
-                            Device is not allocated
-                        </p>
+                        <div className="rounded-lg border border-dashed p-4">
+                            <p className="text-gray-500">
+                                Device is not allocated
+                            </p>
+                        </div>
                     )}
                 </div>
 
