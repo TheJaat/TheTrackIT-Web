@@ -87,7 +87,7 @@ export function DeviceTable({
                                 </Button>
                             </Link>
 
-                            {device.currentUserId ===
+                            {device.currentUser?.id ===
                                 currentUserId ? (
                                 <Button
                                     variant="danger"
