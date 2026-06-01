@@ -1,6 +1,7 @@
 'use client';
 
 import { useUsers } from '@/hooks/use-users';
+import Link from 'next/link';
 
 export default function UsersPage() {
     const {
@@ -59,7 +60,12 @@ export default function UsersPage() {
                                 className="border-t"
                             >
                                 <td className="p-3">
-                                    {user.name}
+                                    <Link
+                                        href={`/users/${user.id}`}
+                                        className="text-blue-600 hover:underline"
+                                    >
+                                        {user.name}
+                                    </Link>
                                 </td>
 
                                 <td className="p-3">
