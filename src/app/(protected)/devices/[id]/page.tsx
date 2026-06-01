@@ -8,8 +8,60 @@ import { ReturnDevice } from '@/components/devices/return-device';
 import { DeviceHistory } from '@/components/devices/device-history';
 import { Badge } from '@/components/ui/badge';
 import { DeviceQr } from '@/components/devices/device-qr';
+import { AssetLabel } from '@/components/devices/asset-label';
+import { useRef } from 'react';
 
 export default function DevicePage() {
+
+    const labelRef =
+        useRef<HTMLDivElement>(null);
+
+    function handlePrint() {
+        if (!labelRef.current) {
+            return;
+        }
+
+        const printWindow =
+            window.open(
+                '',
+                '_blank',
+                'width=500,height=600',
+            );
+
+        if (!printWindow) {
+            return;
+        }
+
+        printWindow.document.write(`
+        <html>
+            <head>
+                <title>Asset Label</title>
+                <style>
+                    body {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin: 20px;
+                        font-family: Arial;
+                    }
+                </style>
+            </head>
+            <body>
+                ${labelRef.current.outerHTML}
+            </body>
+        </html>
+    `);
+
+        printWindow.document.close();
+
+        printWindow.focus();
+
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+        }, 300);
+    }
+
     const params = useParams();
 
     const {
@@ -128,6 +180,32 @@ export default function DevicePage() {
 
                 <DeviceQr
                     deviceId={data.id}
+                />
+
+            </div>
+
+            <div className="border rounded-lg p-6">
+
+                <div className="flex items-center justify-between mb-6">
+
+                    <h2 className="text-lg font-semibold">
+                        Asset Label
+                    </h2>
+
+                    <button
+                        onClick={handlePrint}
+                        className="rounded bg-green-600 px-4 py-2 text-white"
+                    >
+                        Print Label
+                    </button>
+
+                </div>
+
+                <AssetLabel
+                    ref={labelRef}
+                    deviceId={data.id}
+                    deviceCode={data.deviceCode}
+                    deviceName={`${data.brand} ${data.model}`}
                 />
 
             </div>
