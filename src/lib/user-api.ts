@@ -20,3 +20,16 @@ export async function getUser(
 
     return response.data;
 }
+
+export async function updateUser(
+    id: string,
+    data: any,
+) {
+    const response =
+        await api.patch(
+            `/users/${id}`,
+            data,
+        );
+
+    return response.data;
+}

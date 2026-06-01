@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 
 import { useUser } from '@/hooks/use-user';
+import Link from 'next/link';
 
 export default function UserPage() {
     const params = useParams();
@@ -39,6 +40,13 @@ export default function UserPage() {
                     User Details
                 </p>
             </div>
+
+            <Link
+                href={`/users/${data.id}/edit`}
+                className="inline-block rounded bg-blue-600 px-4 py-2 text-white"
+            >
+                Edit User
+            </Link>
 
             <div className="rounded-lg border bg-white p-6">
 
