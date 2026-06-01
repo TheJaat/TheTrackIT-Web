@@ -7,6 +7,7 @@ import { AllocateDevice } from '@/components/devices/allocate-device';
 import { ReturnDevice } from '@/components/devices/return-device';
 import { DeviceHistory } from '@/components/devices/device-history';
 import { Badge } from '@/components/ui/badge';
+import { DeviceQr } from '@/components/devices/device-qr';
 
 export default function DevicePage() {
     const params = useParams();
@@ -40,8 +41,7 @@ export default function DevicePage() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="border rounded-lg p-6">
                     <h2 className="text-lg font-semibold mb-4">
                         Device Information
@@ -125,6 +125,10 @@ export default function DevicePage() {
                         </div>
                     )}
                 </div>
+
+                <DeviceQr
+                    deviceId={data.id}
+                />
 
             </div>
 
