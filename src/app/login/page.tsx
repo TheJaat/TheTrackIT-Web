@@ -14,63 +14,113 @@ export default function LoginPage() {
   const [password, setPassword] =
     useState('');
 
+  const [loading, setLoading] =
+    useState(false);
+
+  const [error, setError] =
+    useState('');
+
   async function handleLogin(
     e: React.FormEvent,
   ) {
     e.preventDefault();
 
-    const result =
-      await login(
-        email,
-        password,
+    setLoading(true);
+    setError('');
+
+    try {
+      const result =
+        await login(
+          email,
+          password,
+        );
+
+      localStorage.setItem(
+        'token',
+        result.access_token,
       );
 
-      console.log(result);
-
-    localStorage.setItem(
-      'token',
-      result.access_token,
-    );
-
-    router.push('/dashboard');
+      router.push('/dashboard');
+    } catch {
+      setError('Invalid email or password',);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <form
-        onSubmit={handleLogin}
-        className="w-96 space-y-4"
-      >
-        <input
-          value={email}
-          onChange={(e) =>
-            setEmail(
-              e.target.value,
-            )
-          }
-          placeholder="Email"
-          className="w-full border p-2"
-        />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
 
-        <input
-          value={password}
-          onChange={(e) =>
-            setPassword(
-              e.target.value,
-            )
-          }
-          placeholder="Password"
-          type="password"
-          className="w-full border p-2"
-        />
+        <div className="text-center mb-8">
 
-        <button
-          type="submit"
-          className="w-full border p-2"
+          <h1 className="text-3xl font-bold">
+            Track It
+          </h1>
+
+          <p className="text-gray-500 mt-2">
+            Device Tracking System
+          </p>
+
+        </div>
+
+        {error && (
+          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
+        <form
+          onSubmit={handleLogin}
+          className="space-y-5"
         >
-          Login
-        </button>
-      </form>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Email
+            </label>
+
+            <input
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+              type="email"
+              placeholder="Enter your email"
+              className="w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Password
+            </label>
+
+            <input
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
+              type="password"
+              placeholder="Enter your password"
+              className="w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-blue-600 py-3 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading
+              ? 'Signing In...'
+              : 'Login'}
+          </button>
+
+        </form>
+
+      </div>
+
     </div>
   );
 }

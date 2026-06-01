@@ -22,6 +22,10 @@ export function AllocateDevice({ deviceId }: Props) {
             await queryClient.invalidateQueries({
                 queryKey: ['device', deviceId],
             });
+
+            await queryClient.invalidateQueries({
+                queryKey: ['devices'],
+            });
         } finally {
             setLoading(false);
         }
