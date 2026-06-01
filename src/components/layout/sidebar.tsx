@@ -1,8 +1,16 @@
 'use client';
 
+import { useCurrentUser } from '@/hooks/use-current-user';
 import Link from 'next/link';
 
+export function logout() {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+}
+
 export function Sidebar() {
+    const { data } = useCurrentUser();
+
     return (
         <aside className="w-64 border-r bg-white">
 
@@ -12,11 +20,11 @@ export function Sidebar() {
                 </h1>
                 <div className="mt-4 rounded-lg bg-gray-100 p-3">
                     <p className="font-medium">
-                        Manish
+                        {data?.name}
                     </p>
 
                     <p className="text-sm text-gray-500">
-                        Administrator
+                        {data?.role}
                     </p>
                 </div>
             </div>
@@ -46,7 +54,7 @@ export function Sidebar() {
 
             </nav>
 
-            <button
+            <button onClick={logout}
                 className="w-full rounded-lg border px-4 py-2 text-left hover:bg-gray-100"
             >
                 Logout
