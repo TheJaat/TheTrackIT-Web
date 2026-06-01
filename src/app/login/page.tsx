@@ -50,14 +50,13 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 p-8">
 
         <div className="text-center mb-8">
 
-          <h1 className="text-3xl font-bold">
-            Track It
-          </h1>
-
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-2xl font-bold text-white">
+            T
+          </div>
           <p className="text-gray-500 mt-2">
             Device Tracking System
           </p>
