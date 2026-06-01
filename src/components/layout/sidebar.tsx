@@ -1,29 +1,42 @@
+'use client';
+
 import Link from 'next/link';
 
 export function Sidebar() {
-  return (
-    <aside className="w-64 border-r p-4">
-      <div className="mb-6 font-bold">
-        Track It
-      </div>
+    return (
+        <aside className="w-64 border-r bg-white">
 
-      <nav className="space-y-3">
-        <Link href="/dashboard">
-          Dashboard
-        </Link>
+            <div className="p-6 border-b">
+                <h1 className="text-xl font-bold">
+                    Track It
+                </h1>
+            </div>
 
-        <br />
+            <nav className="p-4 space-y-2">
 
-        <Link href="/devices">
-          Devices
-        </Link>
+                <Link
+                    href="/dashboard"
+                    className="block rounded p-2 hover:bg-gray-100"
+                >
+                    Dashboard
+                </Link>
 
-        <br />
+                <Link
+                    href="/devices"
+                    className="block rounded p-2 hover:bg-gray-100"
+                >
+                    Devices
+                </Link>
 
-        <Link href="/allocations">
-          Allocations
-        </Link>
-      </nav>
-    </aside>
-  );
+                <Link
+                    href="/users"
+                    className="block rounded p-2 hover:bg-gray-100"
+                >
+                    Users
+                </Link>
+
+            </nav>
+
+        </aside>
+    );
 }
