@@ -1,7 +1,13 @@
 import { api } from './api';
 
 export async function getUsers() {
-  const response = await api.get('/users');
+    const response = await api.get('/users');
 
-  return response.data;
+    return response.data;
+}
+
+export async function getUsersCount() {
+    const response = await api.get('/users/count');
+
+    return response.data;
 }
