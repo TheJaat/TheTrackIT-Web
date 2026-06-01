@@ -42,6 +42,18 @@ export default function DevicesPage() {
                 Devices
             </h1>
 
+            <div className="flex items-center justify-between">
+
+                <h1 className="text-2xl font-bold">
+                    Devices
+                </h1>
+
+                <Button>
+                    Add Device
+                </Button>
+
+            </div>
+
             <Input
                 placeholder="Search devices..."
                 value={searchText}
